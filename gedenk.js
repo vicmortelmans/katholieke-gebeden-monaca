@@ -82,7 +82,7 @@ $(document).ready(function() {
 //      		navigator.splashscreen.hide();
 //        }, false);
     }
-});
+}); 
 var Webflow = Webflow || [];
 Webflow.push(function () { 
     var speed = 0.90;
