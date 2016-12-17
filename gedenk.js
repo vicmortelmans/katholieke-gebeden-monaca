@@ -29,7 +29,7 @@ $(document).ready(function() {
     rowH = bodyH / 11;
     if (rowH < 48) {
         rowH = 48;
-        bodyH = 10 * rowH;
+        bodyH = 11 * rowH;
     }
     // calculate the fontsize
     var fontS = 14 / 48 * rowH;
@@ -39,12 +39,12 @@ $(document).ready(function() {
     if (bgHorizontality > bodyHorizontality) { // like e.g. on a portait phone screen
         var bgScale = bodyH / bgImage.h;
         var bgH = bodyH;
-        var bgX = - 1/2 * (bgScale * bgImage.w - bodyW);
+        bgX = - 1/2 * (bgScale * bgImage.w - bodyW);
         var bgSize = 'auto' + ' ' + bgH + 'px';
     } else { // like e.g. on a widescreen monitor
         var bgScale = bodyW / bgImage.w;
         var bgW = bodyW;
-        var bgY = - 1/2 * (bgScale * bgImage.h - bodyH);
+        bgY = - 1/2 * (bgScale * bgImage.h - bodyH);
         var bgSize = bgW + 'px auto';
     }
     // set the rows with the row height and fontsize
