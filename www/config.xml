@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<widget xmlns = "http://www.w3.org/ns/widgets"
+    
+    xmlns:gap   = "http://phonegap.com/ns/1.0"
+    id          = "net.gelovenleren.gebeden"
+    version     = "3.0.0" >
+    
+    <!--preference name="phonegap-version" value="3.6.3" /-->
+    
+    <gap:plugin name="org.apache.cordova.splashscreen" />
+    <preference name="AutoHideSplashScreen" value="false" />
+    <preference name="SplashScreenDelay" value="10000"/>
+    <gap:splash src="splash.png" width="480" height="800" />
+    
+    <name>Gebeden</name>
+    
+    <description>
+        Katholieke gebeden 
+    </description>
+    
+    <author href="http://gebeden.gelovenleren.net" email="info@gelovenleren.net">
+        Geloven Leren
+    </author>
+    
+    <icon src="icon.png" />
+    
+    <feature name="http://api.phonegap.com/1.0/device"/>
+    
+</widget>
