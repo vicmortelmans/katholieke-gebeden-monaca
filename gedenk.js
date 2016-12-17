@@ -36,23 +36,21 @@ $(document).ready(function() {
     // calculate the size and offset of the image
     var bgX = 0;
     var bgY = 0;
-    var bgW = 'auto';
-    var bgH = 'auto';
     if (bgHorizontality > bodyHorizontality) { // like e.g. on a portait phone screen
         var bgScale = bodyH / bgImage.h;
         var bgH = bodyH;
         var bgX = - 1/2 * (bgScale * bgImage.w - bodyW);
-        var bgSize = bgW + 'px' + ' ' + bgH + 'px';
+        var bgSize = 'auto' + ' ' + bgH + 'px';
     } else { // like e.g. on a widescreen monitor
         var bgScale = bodyW / bgImage.w;
         var bgW = bodyW;
         var bgY = - 1/2 * (bgScale * bgImage.h - bodyH);
-        var bgSize = bgW + 'px' + ' ' + bgH + 'px';
+        var bgSize = bgW + 'px auto';
     }
     // set the rows with the row height and fontsize
     $('header,.ruimte,h1.init').css('height', rowH + 'px');
     $('header,h1').css('line-height', rowH + 'px').css('font-size', fontS + 'pt');
-    // set the background image
+    // set the background image  
     $('header,.ruimte,h1')
 //        .css('background', '#607D8B')
         .css('background-image', 'url(' + bgImage.file + ')')
@@ -78,16 +76,16 @@ $(document).ready(function() {
     if (!isPhoneGapApp) {
         // something to do only on web
         $('footer').show();
-    } else {
+//    } else {
         // something to do only on app
-        document.addEventListener("deviceready", function(){
-      		navigator.splashscreen.hide();
-        }, false);
+//        document.addEventListener("deviceready", function(){
+//      		navigator.splashscreen.hide();
+//        }, false);
     }
 });
 var Webflow = Webflow || [];
 Webflow.push(function () { 
-    var speed = 0.96;
+    var speed = 0.90;
     var speedLast = 1.00;
     $('h1').on('click', function() {
         var scrollReference = $(document).scrollTop();
