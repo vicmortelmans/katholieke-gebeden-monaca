@@ -1,13 +1,3 @@
-/**
- * This is an auto-generated code by Monaca JS/CSS Components.
- * Please do not edit by hand.
- */
-
-/*** <GENERATED> ***/
-
-
-/*** <Start:monaca-jquery> ***/
-/*** <Start:monaca-jquery LoadJs:"components/monaca-jquery/jquery.js"> ***/
 /*!
  * jQuery JavaScript Library v2.0.3
  * http://jquery.com/
@@ -8837,6 +8827,3 @@ if ( typeof window === "object" && typeof window.document === "object" ) {
 }
 
 })( window );
-
-/*** <End:monaca-jquery LoadJs:"components/monaca-jquery/jquery.js"> ***/
-/*** <End:monaca-jquery> ***/

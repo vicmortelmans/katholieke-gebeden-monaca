@@ -1,5 +1,6 @@
-var isPhoneGapApp = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
 var rowH;
+var isphone = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
+
 $(document).ready(function() {
     // define available background images
     var bgImages = [
@@ -49,7 +50,7 @@ $(document).ready(function() {
     }
     // set the rows with the row height and fontsize
     $('header,.ruimte,h1.init').css('height', rowH + 'px');
-    $('header,h1').css('line-height', rowH + 'px').css('font-size', fontS + 'pt');
+    $('header,.ruimte,h1').css('line-height', rowH + 'px').css('font-size', fontS + 'pt');
     // set the background image  
     $('header,.ruimte,h1')
 //        .css('background', '#607D8B')
@@ -73,7 +74,7 @@ $(document).ready(function() {
     $.each(bgOffsets, function(index, value) {
         $(value.q).css('background-position-y', value.y + 'px');    
     });
-    if (!isPhoneGapApp) {
+    if (!isphone) {
         // something to do only on web
         $('footer').show();
 //    } else {
@@ -86,7 +87,7 @@ $(document).ready(function() {
 var Webflow = Webflow || [];
 Webflow.push(function () { 
     var speed = 0.90;
-    var speedLast = 1.00;
+    var speedLast = 0.90;
     $('h1').on('click', function() {
         var scrollReference = $(document).scrollTop();
         var scrollCorrection = 0;
@@ -105,14 +106,11 @@ Webflow.push(function () {
                 if (showingContent.length) {
                     if (before) scrollCorrection -= showingContent.height();
                     // hide the contents in that h1
-                    showingContent.removeClass('showing').animate({
-                        height: 0
-                    }, speed * 1000);
+                    TweenLite.to(showingContent,1,{height:0});
                 }
                 // hide the h2's in that h1
-                showingH2s.removeClass('listed').removeClass('selected').animate({
-                    height: 0
-                }, speed * 1000);
+                TweenLite.to(showingH2s,1,{height:0});
+                showingH2s.removeClass('listed').removeClass('selected');
             }
             openH1.removeClass('selected')
             if (before) scrollCorrection += openH1.height();
@@ -121,16 +119,10 @@ Webflow.push(function () {
             $(this).addClass('selected');
             var contentToShow = $(this).parent().find('h2');
             // show the h2's in this h1
-            contentToShow.addClass('listed').animate({
-                height: "48px"
-            }, speed * 1000);
+            contentToShow.addClass('listed');
+            TweenLite.to(contentToShow,1,{height:48});
             // align to top of the screen
-            $('html, body').animate({
-                scrollTop: (Math.max(0, scrollReference + scrollCorrection))
-            }, speedLast * 1000, function() {
-                $('body').css('display', 'table').height();
-                $('body').css('display', 'block'); 
-            });
+            TweenLite.to(window,1,{scrollTo:Math.max(0, scrollReference + scrollCorrection)});
         }
     });
     $('h2').on('click', function() {
@@ -145,9 +137,8 @@ Webflow.push(function () {
             if (contentToHide.length) {
                 if (before) scrollCorrection -= contentToHide.get(0).scrollHeight; 
                 // hide the content in that h2
-                contentToHide.removeClass('showing').animate({
-                    height: 0
-                }, speed * 1000); 
+                contentToHide.removeClass('showing');
+                TweenLite.to(contentToHide,1,{height:0});
             }
             // change that h2 to listed
             openH2.removeClass('selected').addClass('listed');
@@ -160,13 +151,10 @@ Webflow.push(function () {
             var contentToShowHeight = contentToShow.get(0).scrollHeight;
             var screenHeight = $(window).innerHeight();
             // show the content
-            contentToShow.addClass('showing').animate({
-                height: Math.max(contentToShowHeight, screenHeight) + "px"
-            }, speed * 1000);
+            contentToShow.addClass('showing');
+            TweenLite.to(contentToShow,1,{height:Math.max(contentToShowHeight, screenHeight)});
             // align to top of the screen
-            $('html, body').animate({
-                scrollTop: (scrollReference + scrollCorrection)
-            }, speedLast * 1000);
+            TweenLite.to(window,1,{scrollTo:Math.max(0, scrollReference + scrollCorrection)});
         }
         /* h2 moves up because elements before h2 are hiding
          * the page scrolls up to h2's new position 
@@ -187,26 +175,21 @@ Webflow.push(function () {
                     showingH2s.each(function() {
                         scrollCorrection -= this.scrollHeight;
                     });
-                showingH2s.removeClass('listed').removeClass('selected').animate({
-                    height: 0
-                }, speed * 1000);
+                showingH2s.removeClass('listed').removeClass('selected');
+                TweenLite.to(showingH2s,1,{height:0});
                 var showingContent = openH1.parent().find('.content.showing');
                 if (showingContent.length) {
                     if (before) scrollCorrection -= showingContent.height();
-                    showingContent.removeClass('showing').animate({
-                        height: 0
-                    }, speed * 1000);
+                    showingContent.removeClass('showing');
+                    TweenLite.to(showingContent,1,{height:0});
                 }
             }
-            openH1.removeClass('selected').animate({
-                height: rowH + "px"
-            }, speed * 1000);
+            openH1.removeClass('selected');
+            TweenLite.to(openH1,1,{height:rowH});
             if (before) scrollCorrection += openH1.height();
         }
         // align to top of the screen
-        $('html, body').animate({
-            scrollTop: (Math.max(0, scrollReference + scrollCorrection))
-        }, speedLast * 1000);
+        TweenLite.to(window,1,{scrollTo:Math.max(0, scrollReference + scrollCorrection)});
     });
     $('.content').on('click', function() {
         // workaround for webflow sliders not being aligned properly
