@@ -1,11 +1,11 @@
 {
-  "name": "monaca-cordova-loader",
-  "version": "1.0.0",
-  "description": "Load cordova.js for Monaca apps.",
-  "main": "cordova-loader.js",
+  "name": "monaca-jquery",
+  "version": "2.0.3",
+  "description": "Dist version of jQuery for Monaca Component.",
+  "main": "jquery.js",
   "monaca" : {
     "main": [
-      "cordova-loader.js"
+      "jquery.js"
     ]
   },
   "keywords": [
@@ -16,7 +16,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git://github.com:monaca/monaca-component-cordova-loader.git"
+    "url": "git://github.com:monaca/monaca-component-jquery.git"
   },
   "homepage": "http://monaca.mobi/",
   "ignore": [

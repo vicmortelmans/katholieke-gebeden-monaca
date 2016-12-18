@@ -92,11 +92,10 @@
   <preference name="WindowsStorePublisherName" value="My Name"/>
   <preference name="WindowsStoreIdentityName" value="387f8b66-e6c3-b52a-9fec-0345f64cbbd0"/>
   <access origin="*"/>
-  <preference name="KeepRunning" value="true"/>
+  <preference name="KeepRunning" value="false"/>
   <preference name="monaca:AndroidIsPackageNameSeparate" value="false"/>
   <preference name="DisallowOverscroll" value="false"/>
   <preference name="Orientation" value="default"/>
   <preference name="SplashScreenDelay" value="2000"/>
   <preference name="Fullscreen" value="false"/>
-  <preference name="webView" value="org.crosswalk.engine.XWalkWebViewEngine"/>
 </widget>
