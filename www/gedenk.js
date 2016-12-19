@@ -1,7 +1,12 @@
 var rowH;
 var isphone = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
 
-$(document).ready(function() {
+document.addEventListener("deviceready", function(){
+    console.log("DEBUG in deviceready handler now");
+});
+
+$(function() {
+    console.log("DEBUG in jQuery ready handler now")
     // define available background images
     var bgImages = [
         { file: 'images/01.jpg', w: 1536, h: 1024 },
@@ -26,7 +31,7 @@ $(document).ready(function() {
     var bodyW = $('body').width();
     var bodyH = $('body').height();
     var bodyHorizontality = bodyW / bodyH;
-    // calculate the row height (minimum 48)
+    // calculate the row hei ght (minimum 48)
     rowH = bodyH / 11;
     if (rowH < 48) {
         rowH = 48;
@@ -169,7 +174,7 @@ Webflow.push(function () {
         var openH1 = $('h1.selected');
         if (openH1.length) {
             var before = $('h1').index(openH1) < $('h1').index(this);
-            var showingH2s = openH1.parent().find('.toc');
+            var showingH2s = openH1.parent().find('h2.listed,h2.selected');
             if (showingH2s.length) {
                 if (before) 
                     showingH2s.each(function() {
@@ -199,5 +204,4 @@ Webflow.push(function () {
         // so this one ends up as most elegant.
         $(window).trigger('resize');
     });
-//    $('.content').hide();
 });

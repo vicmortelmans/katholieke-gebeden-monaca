@@ -20,8 +20,10 @@
     "title-ja": "",
     "title-en": "Katholieke Gebeden",
     "description-ja": "",
-    "description-en": "20161217",
+    "description-en": "20161219",
     "category": "User Template",
-    "platform": [],
-    "name": "generated-1481978118-5852f6f5803451967360abff"
+    "platform": [
+        "android"
+    ],
+    "name": "generated-1482154945-5852f6f5803451967360abff"
 }
