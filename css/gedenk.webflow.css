@@ -16,6 +16,18 @@ header {
   background-repeat: no-repeat;
   color: white;
 }
+.header-button {
+  float: right;
+  width: 89px;
+  height: 89px;
+  z-index: 10;
+  position: relative; /* for z-index to work */
+  background-image: url(../images/ic_share_white_36dp_1x.png);
+  background-position: 50% 50%;
+  background-size: auto;
+  background-repeat: no-repeat;
+  cursor: pointer;
+}
 .item {
   max-width: 100%;
 }
