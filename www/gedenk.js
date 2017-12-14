@@ -130,6 +130,7 @@ Webflow.push(function () {
             TweenLite.to(window,1,{scrollTo:Math.max(0, scrollReference + scrollCorrection)});
         }
         window.location.hash = "";
+        document.title = "Katholieke Gebeden";
     });
     $('h2').on('click', function() {
         var scrollReference = $(this).offset().top /*+ this.scrollHeight*/;
@@ -163,6 +164,7 @@ Webflow.push(function () {
             TweenLite.to(window,1,{scrollTo:Math.max(0, scrollReference + scrollCorrection)});
         }
         window.location.hash = $(this).parent().attr('id');
+        document.title = $(this).text();
         /* h2 moves up because elements before h2 are hiding
          * the page scrolls up to h2's new position 
          * if the scrolling is faster than the moving, h2 appears to move down */
@@ -197,6 +199,8 @@ Webflow.push(function () {
         }
         // align to top of the screen
         TweenLite.to(window,1,{scrollTo:Math.max(0, scrollReference + scrollCorrection)});
+        window.location.hash = "";
+        document.title = "Katholieke Gebeden";
     });
     $('.content').on('click', function() {
         // workaround for webflow sliders not being aligned properly
@@ -215,7 +219,7 @@ Webflow.push(function () {
         presetDivH1.click();
         window.setTimeout(function() {
           presetDivH2.click();
-        }, 1000);
+        }, 1400); // based on experimenting
       }
     }
     /* ** Web Share API only active on https sites **
