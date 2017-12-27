@@ -66,14 +66,14 @@ $(function() {
     var bgOffsets = [
         { q: 'header', y: bgY },
         { q: '.ruimte.boven', y: bgY - rowH },
-        { q: '#gregoriaanse-liederen h1', y: bgY - 2*rowH },
-        { q: '#gemeenschappelijke-gebeden h1', y: bgY - 3*rowH },
-        { q: '#drie-eenheid h1', y: bgY - 4*rowH },
-        { q: '#aanbidding h1', y: bgY - 5*rowH },
-        { q: '#heilige-geest h1', y: bgY - 6*rowH },
-        { q: '#maria h1', y: bgY - 7*rowH },
-        { q: '#voor-de-mis h1', y: bgY - 8*rowH },
-        { q: '#na-de-mis h1', y: bgY - 9*rowH },
+        { q: '#gregoriaanse-liederen', y: bgY - 2*rowH },
+        { q: '#gemeenschappelijke-gebeden', y: bgY - 3*rowH },
+        { q: '#drie-eenheid', y: bgY - 4*rowH },
+        { q: '#aanbidding', y: bgY - 5*rowH },
+        { q: '#heilige-geest', y: bgY - 6*rowH },
+        { q: '#maria', y: bgY - 7*rowH },
+        { q: '#voor-de-mis', y: bgY - 8*rowH },
+        { q: '#na-de-mis', y: bgY - 9*rowH },
         { q: '.ruimte.beneden', y: bgY - 10*rowH }
     ];
     $.each(bgOffsets, function(index, value) {
@@ -89,161 +89,186 @@ $(function() {
 //        }, false);
     }
 }); 
-var Webflow = Webflow || [];
-Webflow.push(function () { 
-    var speed = 0.90;
-    var speedLast = 0.90;
-    $('h1').on('click', function() {
-        var scrollReference = $(document).scrollTop();
-        var scrollCorrection = 0;
-        // find the h1 for which the toc is shown
-        var openH1 = $('h1.selected'); 
-        var onlyCollapse = $(this).hasClass('selected');
-        if (openH1.length) {
-            var before = $('h1').index(openH1) < $('h1').index(this);
-            var showingH2s = openH1.parent().find('h2.listed,h2.selected');
-            if (showingH2s.length) {
-                if (before) 
-                    showingH2s.each(function() {
-                        scrollCorrection -= this.scrollHeight;
-                    });
-                var showingContent = openH1.parent().find('.content.showing');
-                if (showingContent.length) {
-                    if (before) scrollCorrection -= showingContent.height();
-                    // hide the contents in that h1
-                    TweenLite.to(showingContent,1,{height:0});
-                }
-                // hide the h2's in that h1
-                TweenLite.to(showingH2s,1,{height:0});
-                showingH2s.removeClass('listed').removeClass('selected');
-            }
-            openH1.removeClass('selected')
-            if (before) scrollCorrection += openH1.height();
-        }
-        if (!onlyCollapse) {
-            $(this).addClass('selected');
-            var contentToShow = $(this).parent().find('h2');
-            // show the h2's in this h1
-            contentToShow.addClass('listed');
-            TweenLite.to(contentToShow,1,{height:48});
-            // align to top of the screen
-            TweenLite.to(window,1,{scrollTo:Math.max(0, scrollReference + scrollCorrection)});
-        }
-        window.location.hash = "";
-        document.title = "Katholieke Gebeden";
-    });
-    $('h2').on('click', function() {
-        var scrollReference = $(this).offset().top /*+ this.scrollHeight*/;
-        var scrollCorrection = 0;
-        // find the h2 for which content is shown
-        var openH2 = $(this).parents('.toc').find('h2.selected');
-        var onlyCollapse = $(this).hasClass('selected');
-        if (openH2.length) {
-            var before = $('h2').index(openH2) < $('h2').index(this);
-            var contentToHide = openH2.siblings('.content');
-            if (contentToHide.length) {
-                if (before) scrollCorrection -= contentToHide.get(0).scrollHeight; 
-                // hide the content in that h2
-                contentToHide.removeClass('showing');
-                TweenLite.to(contentToHide,1,{height:0});
-            }
-            // change that h2 to listed
-            openH2.removeClass('selected').addClass('listed');
-        }
-        // only do the following if the clicked h2 was not the open one
-        if (!onlyCollapse) {
-            // change this h2 to selected
-            $(this).removeClass('listed').addClass('selected');
-            var contentToShow = $(this).siblings('.content');
-            var contentToShowHeight = contentToShow.get(0).scrollHeight;
-            var screenHeight = $(window).innerHeight();
-            // show the content
-            contentToShow.addClass('showing');
-            TweenLite.to(contentToShow,1,{height:Math.max(contentToShowHeight, screenHeight)});
-            // align to top of the screen
-            TweenLite.to(window,1,{scrollTo:Math.max(0, scrollReference + scrollCorrection)});
-        }
-        window.location.hash = $(this).parent().attr('id');
-        document.title = $(this).text();
-        /* h2 moves up because elements before h2 are hiding
-         * the page scrolls up to h2's new position 
-         * if the scrolling is faster than the moving, h2 appears to move down */
-    });
-    $('header').on('click', function() {
-        // hide the h2's in that h1
+function headerOnClick(header) {
+  // hide the h2's in the selected h1
+  // hide the contents in that h1
+  var scrollReference = $(document).scrollTop();
+  var scrollCorrection = 0;
+  // find the h1 for which the toc is shown
+  var openH1 = $('h1.selected');
+  if (openH1.length) {
+    var before = $('h1').index(openH1) < $('h1').index(header);
+    var showingH2s = openH1.parent().find('h2.listed,h2.selected');
+    if (showingH2s.length) {
+      if (before) 
+        showingH2s.each(function() {
+          scrollCorrection -= header.scrollHeight;
+        });
+      // hide the h2's in that h1
+      TweenLite.to(showingH2s,1,{height:0});
+      showingH2s.removeClass('listed').removeClass('selected');
+      var showingContent = openH1.parent().find('.content.showing');
+      if (showingContent.length) {
+        if (before) scrollCorrection -= showingContent.height();
         // hide the contents in that h1
-        var scrollReference = $(document).scrollTop();
-        var scrollCorrection = 0;
-        // find the h1 for which the toc is shown
-        var openH1 = $('h1.selected');
-        if (openH1.length) {
-            var before = $('h1').index(openH1) < $('h1').index(this);
-            var showingH2s = openH1.parent().find('h2.listed,h2.selected');
-            if (showingH2s.length) {
-                if (before) 
-                    showingH2s.each(function() {
-                        scrollCorrection -= this.scrollHeight;
-                    });
-                showingH2s.removeClass('listed').removeClass('selected');
-                TweenLite.to(showingH2s,1,{height:0});
-                var showingContent = openH1.parent().find('.content.showing');
-                if (showingContent.length) {
-                    if (before) scrollCorrection -= showingContent.height();
-                    showingContent.removeClass('showing');
-                    TweenLite.to(showingContent,1,{height:0});
-                }
-            }
-            openH1.removeClass('selected');
-            TweenLite.to(openH1,1,{height:rowH});
-            if (before) scrollCorrection += openH1.height();
-        }
-        // align to top of the screen
-        TweenLite.to(window,1,{scrollTo:Math.max(0, scrollReference + scrollCorrection)});
-        window.location.hash = "";
-        document.title = "Katholieke Gebeden";
-    });
-    $('.content').on('click', function() {
-        // workaround for webflow sliders not being aligned properly
-        // when being rendered while part of hidden content.
-        // after testing numberous workarounds, I found out that a
-        // window resize triggers proper realigning of the slider
-        // so this one ends up as most elegant.
-        $(window).trigger('resize');
-    });
-    var preset = window.location.hash;
-    if (preset) {
-      var presetDiv = $('div' + preset);
-      var presetDivH2 = presetDiv.find('h2');
-      var presetDivH1 = presetDiv.parents().children('h1');
-      if (presetDivH2.length) {
-        presetDivH1.click();
-        window.setTimeout(function() {
-          presetDivH2.click();
-        }, 1400); // based on experimenting
+        TweenLite.to(showingContent,1,{height:0});
+        showingContent.removeClass('showing');
       }
     }
-    /* ** Web Share API only active on https sites **
-    if (navigator.share) {
-      $('#share').on('click', function() {
-        var anchor = window.location.hash;
-        if (anchor) {
-          var title = $('div' + anchor).children('h2').text();
-          var text = $('div' + anchor).children('div.content').find('p').first().text();
-        } else {
-          var title = "Katholieke Gebeden";
-          var text = "Traditionele gebeden en gregoriaanse liederen, ook speciaal voor of na de mis.";
-        }
-        navigator.share({
-            title: title,
-            text: text,
-            url: document.location.href
-        })
-          .then(() => console.log('Successful share'))
-          .catch((error) => console.log('Error sharing', error));
-      });
-    } else {
-      $('#share').hide();
+    TweenLite.to(openH1,1,{height:rowH});
+    openH1.removeClass('selected');
+    if (before) scrollCorrection += openH1.height();
+  }
+  // align to top of the screen
+  TweenLite.to(window,1,{scrollTo:Math.max(0, scrollReference + scrollCorrection)});
+}
+function h1OnClick(h1) {
+  // show all child h2's and hide all contents
+  // if this h1 is open, hide all contents
+  // else (this h1 is closed), close the open h1 and show all h2's
+  var scrollReference = $(document).scrollTop();
+  var scrollCorrection = 0;
+  if ($(h1).is('.selected')) {
+    var showingContent = $(h1).parent().find('.content.showing');
+    if (showingContent.length) {
+      // hide the contents in that h1
+      TweenLite.to(showingContent,1,{height:0});
     }
-    */
+  } else {
+    // find the h1 for which the toc is shown
+    var openH1 = $('h1.selected'); 
+    if (openH1.length) {
+      var before = $('h1').index(openH1) < $('h1').index(h1);
+      var showingH2s = openH1.parent().find('h2.listed,h2.selected');
+      if (showingH2s.length) {
+        if (before) 
+          showingH2s.each(function() {
+              scrollCorrection -= h1.scrollHeight;
+          });
+        var showingContent = openH1.parent().find('.content.showing');
+        if (showingContent.length) {
+          if (before) scrollCorrection -= showingContent.height();
+          // hide the contents in that h1
+          TweenLite.to(showingContent,1,{height:0});
+          showingContent.removeClass('showing');
+        }
+        // hide the h2's in that h1
+        TweenLite.to(showingH2s,1,{height:0});
+        showingH2s.removeClass('listed').removeClass('selected');
+      }
+      openH1.removeClass('selected')
+      if (before) scrollCorrection += openH1.height();
+    }
+    $(h1).addClass('selected');
+  }
+  var h2sToShow = $(h1).parent().find('h2');
+  // show the h2's in this h1
+  h2sToShow.addClass('listed');
+  TweenLite.to(h2sToShow,1,{height:48});
+  // align to top of the screen
+  TweenLite.to(window,1,{scrollTo:Math.max(0, scrollReference + scrollCorrection)});
+}
+function h2OnClick(h2) {
+  // show this content and hide all other
+  // (assumption: the parent h1 is already selected)
+  var scrollReference = $(h2).offset().top /*+ h2.scrollHeight*/;
+  var scrollCorrection = 0;
+  // find the h2 for which content is shown
+  var openH2 = $(h2).parents('.toc').find('h2.selected');
+  if (openH2.length && !$(h2).is(openH2)) {
+    var before = $('h2').index(openH2) < $('h2').index(h2);
+    var contentToHide = openH2.siblings('.content');
+    if (contentToHide.length) {
+      if (before) scrollCorrection -= contentToHide.get(0).scrollHeight; 
+      // hide the content in that h2
+      contentToHide.removeClass('showing');
+      TweenLite.to(contentToHide,1,{height:0});
+    }
+    // change that h2 to listed
+    openH2.removeClass('selected').addClass('listed');
+  }
+  // only do the following if the clicked h2 was not the open one
+  if (!$(h2).is('.selected')) {
+    // change this h2 to selected
+    $(h2).removeClass('listed').addClass('selected');
+    var contentToShow = $(h2).siblings('.content');
+    var contentToShowHeight = contentToShow.get(0).scrollHeight;
+    var screenHeight = $(window).innerHeight();
+    // show the content
+    contentToShow.addClass('showing');
+    TweenLite.to(contentToShow,1,{height:Math.max(contentToShowHeight, screenHeight)});
+  }
+  // align to top of the screen
+  TweenLite.to(window,1,{scrollTo:Math.max(0, scrollReference + scrollCorrection)});
+  /* h2 moves up because elements before h2 are hiding
+   * the page scrolls up to h2's new position 
+   * if the scrolling is faster than the moving, h2 appears to move down */
+}
+var Webflow = Webflow || [];
+Webflow.push(function () { 
+  var speed = 0.90;
+  var speedLast = 0.90;
+  $('header').on('click', function() {
+    headerOnClick(this);
+    window.history.pushState({}, "Katholieke Gebeden", "#");
+  });
+  $('h1').on('click', function() {
+    h1OnClick(this);
+    window.history.pushState({}, "Katholieke Gebeden" + $(this).text(), "#" + $(this).attr('id'));
+  });
+  $('h2').on('click', function() {
+    h2OnClick(this);
+    window.history.pushState({}, "Katholieke Gebeden" + $(this).text(), "#" + $(this).attr('id'));
+  });
+  $('.content').on('click', function() {
+      // workaround for webflow sliders not being aligned properly
+      // when being rendered while part of hidden content.
+      // after testing numberous workarounds, I found out that a
+      // window resize triggers proper realigning of the slider
+      // so this one ends up as most elegant.
+      $(window).trigger('resize');
+  });
+  var navigateToHash = function() {
+    var preset = window.location.hash;
+    if (preset) {
+      var presetHeader = $(preset);
+      if (presetHeader.is('h1')) {
+        h1OnClick(presetHeader);
+      } else {
+        var presetH1 = presetHeader.parents().children('h1');
+        h1OnClick(presetH1);
+        window.setTimeout(function() {
+          h2OnClick(presetHeader);
+        }, 1400); // based on experimenting
+      }
+    } else {
+      $('header').click();
+    }
+  };
+  navigateToHash();
+  $(window).on('hashchange', navigateToHash);
+  /* ** Web Share API only active on https sites **
+  if (navigator.share) {
+    $('#share').on('click', function() {
+      var anchor = window.location.hash;
+      if (anchor) {
+        var title = $('div' + anchor).children('h2').text();
+        var text = $('div' + anchor).children('div.content').find('p').first().text();
+      } else {
+        var title = "Katholieke Gebeden";
+        var text = "Traditionele gebeden en gregoriaanse liederen, ook speciaal voor of na de mis.";
+      }
+      navigator.share({
+          title: title,
+          text: text,
+          url: document.location.href
+      })
+        .then(() => console.log('Successful share'))
+        .catch((error) => console.log('Error sharing', error));
+    });
+  } else {
+    $('#share').hide();
+  }
+  */
 //    $('.content').hide();
 });
