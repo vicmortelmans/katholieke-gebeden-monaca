@@ -32,10 +32,11 @@ $(function() {
     var bodyH = $('body').height();
     var bodyHorizontality = bodyW / bodyH;
     // calculate the row height (minimum 48)
-    rowH = bodyH / 11;
+    rowCount = $('footer').prevAll().length;
+    rowH = bodyH / rowCount;
     if (rowH < 48) {
         rowH = 48;
-        bodyH = 10 * rowH;
+        bodyH = (rowCount - 1) * rowH;
     }
     // calculate the fontsize
     var fontS = 14 / 48 * rowH;
@@ -57,27 +58,15 @@ $(function() {
     $('header,.ruimte,h1.init').css('height', rowH + 'px');
     $('header,.ruimte,h1').css('line-height', rowH + 'px').css('font-size', fontS + 'pt');
     // set the background image  
-    $('header,.ruimte,h1')
+    $('header,.ruimte,.item')
 //        .css('background', '#607D8B')
         .css('background-image', 'url(' + bgImage.file + ')')
         .css('background-size', bgSize)
         .css('background-position-x', bgX + 'px');
     // set the variable Y-offset
-    var bgOffsets = [
-        { q: 'header', y: bgY },
-        { q: '.ruimte.boven', y: bgY - rowH },
-        { q: '#gregoriaanse-liederen', y: bgY - 2*rowH },
-        { q: '#gemeenschappelijke-gebeden', y: bgY - 3*rowH },
-        { q: '#drie-eenheid', y: bgY - 4*rowH },
-        { q: '#aanbidding', y: bgY - 5*rowH },
-        { q: '#heilige-geest', y: bgY - 6*rowH },
-        { q: '#maria', y: bgY - 7*rowH },
-        { q: '#voor-de-mis', y: bgY - 8*rowH },
-        { q: '#na-de-mis', y: bgY - 9*rowH },
-        { q: '.ruimte.beneden', y: bgY - 10*rowH }
-    ];
-    $.each(bgOffsets, function(index, value) {
-        $(value.q).css('background-position-y', value.y + 'px');    
+    $('footer').prevAll().each(function(index) {
+      var actualIndex = rowCount - index - 1;
+      $(this).css('background-position-y', (bgY - actualIndex * rowH) + 'px');
     });
     if (!isphone) {
         // something to do only on web
