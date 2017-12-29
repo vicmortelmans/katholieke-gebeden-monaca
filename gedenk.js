@@ -58,7 +58,7 @@ $(function() {
     $('header,.ruimte,h1.init').css('height', rowH + 'px');
     $('header,.ruimte,h1').css('line-height', rowH + 'px').css('font-size', fontS + 'pt');
     // set the background image  
-    $('header,.ruimte,.item')
+    $('header,.ruimte,.item:has(h1)')
 //        .css('background', '#607D8B')
         .css('background-image', 'url(' + bgImage.file + ')')
         .css('background-size', bgSize)
@@ -81,103 +81,78 @@ $(function() {
 function headerOnClick(header) {
   // hide the h2's in the selected h1
   // hide the contents in that h1
-  var scrollReference = $(document).scrollTop();
-  var scrollCorrection = 0;
+  // align to top of the screen
+  TweenLite.to(window,1,0);
   // find the h1 for which the toc is shown
   var openH1 = $('h1.selected');
-  if (openH1.length) {
-    var before = $('h1').index(openH1) < $('h1').index(header);
-    var showingH2s = openH1.parent().find('h2.listed,h2.selected');
-    if (showingH2s.length) {
-      if (before) 
-        showingH2s.each(function() {
-          scrollCorrection -= header.scrollHeight;
-        });
-      // hide the h2's in that h1
-      TweenLite.to(showingH2s,1,{height:0});
-      showingH2s.removeClass('listed').removeClass('selected');
-      var showingContent = openH1.parent().find('.content.showing');
-      if (showingContent.length) {
-        if (before) scrollCorrection -= showingContent.height();
-        // hide the contents in that h1
-        TweenLite.to(showingContent,1,{height:0});
-        showingContent.removeClass('showing');
-      }
-    }
-    TweenLite.to(openH1,1,{height:rowH});
-    openH1.removeClass('selected');
-    if (before) scrollCorrection += openH1.height();
-  }
-  // align to top of the screen
-  TweenLite.to(window,1,{scrollTo:Math.max(0, scrollReference + scrollCorrection)});
+  var showingH2s = $('h2.listed,h2.selected');
+  // hide the h2's in that h1
+  TweenLite.to(showingH2s,1,{height:0});
+  showingH2s.removeClass('listed').removeClass('selected');
+  var openContent = $('.content.showing');
+  // hide the contents in that h1
+  TweenLite.to(openContent,1,{height:0});
+  openContent.removeClass('showing');
+  TweenLite.to(openH1,1,{height:rowH});
+  openH1.removeClass('selected');
 }
 function h1OnClick(h1) {
   // show all child h2's and hide all contents
   // if this h1 is open, hide all contents
   // else (this h1 is closed), close the open h1 and show all h2's
-  var scrollReference = $(document).scrollTop();
-  var scrollCorrection = 0;
   if ($(h1).is('.selected')) {
-    var showingContent = $(h1).parent().find('.content.showing');
-    if (showingContent.length) {
-      // hide the contents in that h1
-      TweenLite.to(showingContent,1,{height:0});
-    }
+    var openContent = $('.content.showing');
+    // hide the open contents in that h1
+    TweenLite.to(openContent,1,{height:0});
   } else {
+    var scrollTargetHash = '#' + $(h1).attr('id');
+    // align to top of the screen
+    TweenLite.to(window,1,{
+      scrollTo: scrollTargetHash,
+      onComplete: function() {
+        TweenLite.set(window, {scrollTo: scrollTargetHash});
+      }
+    });
     // find the h1 for which the toc is shown
     var openH1 = $('h1.selected'); 
-    if (openH1.length) {
-      var before = $('h1').index(openH1) < $('h1').index(h1);
-      var showingH2s = openH1.parent().find('h2.listed,h2.selected');
-      if (showingH2s.length) {
-        if (before) 
-          showingH2s.each(function() {
-              scrollCorrection -= h1.scrollHeight;
-          });
-        var showingContent = openH1.parent().find('.content.showing');
-        if (showingContent.length) {
-          if (before) scrollCorrection -= showingContent.height();
-          // hide the contents in that h1
-          TweenLite.to(showingContent,1,{height:0});
-          showingContent.removeClass('showing');
-        }
-        // hide the h2's in that h1
-        TweenLite.to(showingH2s,1,{height:0});
-        showingH2s.removeClass('listed').removeClass('selected');
-      }
-      openH1.removeClass('selected')
-      if (before) scrollCorrection += openH1.height();
-    }
+    var showingH2s = $('h2.listed,h2.selected');
+    var openContent = $('.content.showing');
+    // hide the contents in that h1
+    TweenLite.to(openContent,1,{height:0});
+    openContent.removeClass('showing');
+    // hide the h2's in that h1
+    TweenLite.to(showingH2s,1,{height:0});
+    showingH2s.removeClass('listed').removeClass('selected');
+    openH1.removeClass('selected')
     $(h1).addClass('selected');
   }
   var h2sToShow = $(h1).parent().find('h2');
   // show the h2's in this h1
   h2sToShow.addClass('listed');
   TweenLite.to(h2sToShow,1,{height:48});
-  // align to top of the screen
-  TweenLite.to(window,1,{scrollTo:Math.max(0, scrollReference + scrollCorrection)});
 }
 function h2OnClick(h2) {
   // show this content and hide all other
   // (assumption: the parent h1 is already selected)
-  var scrollReference = $(h2).offset().top /*+ h2.scrollHeight*/;
-  var scrollCorrection = 0;
-  // find the h2 for which content is shown
-  var openH2 = $(h2).parents('.toc').find('h2.selected');
-  if (openH2.length && !$(h2).is(openH2)) {
-    var before = $('h2').index(openH2) < $('h2').index(h2);
-    var contentToHide = openH2.siblings('.content');
-    if (contentToHide.length) {
-      if (before) scrollCorrection -= contentToHide.get(0).scrollHeight; 
-      // hide the content in that h2
-      contentToHide.removeClass('showing');
-      TweenLite.to(contentToHide,1,{height:0});
-    }
-    // change that h2 to listed
-    openH2.removeClass('selected').addClass('listed');
-  }
   // only do the following if the clicked h2 was not the open one
   if (!$(h2).is('.selected')) {
+    var scrollTargetHash = '#' + $(h2).attr('id');
+    // find the h2 and content for which content is shown (do it now, because in the onComplete it will be too late)
+    var openH2 = $('h2.selected');
+    var openContent = $('.content.showing');
+    // align to top of the screen
+    TweenLite.to(window,1,{
+      scrollTo: scrollTargetHash,
+      onComplete: function() {
+        // hide the content in the open h2
+        TweenLite.set(openContent, {height: 0});
+        openContent.removeClass('showing');
+        // change that h2 to listed
+        openH2.removeClass('selected').addClass('listed');
+        // align to top of the screen (based on advise from TweenLite forum)
+        TweenLite.set(window, {scrollTo: scrollTargetHash});
+      }
+    });
     // change this h2 to selected
     $(h2).removeClass('listed').addClass('selected');
     var contentToShow = $(h2).siblings('.content');
@@ -187,11 +162,6 @@ function h2OnClick(h2) {
     contentToShow.addClass('showing');
     TweenLite.to(contentToShow,1,{height:Math.max(contentToShowHeight, screenHeight)});
   }
-  // align to top of the screen
-  TweenLite.to(window,1,{scrollTo:Math.max(0, scrollReference + scrollCorrection)});
-  /* h2 moves up because elements before h2 are hiding
-   * the page scrolls up to h2's new position 
-   * if the scrolling is faster than the moving, h2 appears to move down */
 }
 var Webflow = Webflow || [];
 Webflow.push(function () { 
@@ -231,7 +201,7 @@ Webflow.push(function () {
         }, 1400); // based on experimenting
       }
     } else {
-      $('header').click();
+      headerOnClick($('header'));
     }
   };
   navigateToHash();
