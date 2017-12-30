@@ -164,7 +164,7 @@ function h2OnClick(h2) {
   } else {
     // select the next h2 (if any)
     nextH2 = $(h2).parent().next().find('h2');
-    if (nextH2.length) h2OnClick();
+    if (nextH2.length) h2OnClick(nextH2);
   }
 }
 var Webflow = Webflow || [];
