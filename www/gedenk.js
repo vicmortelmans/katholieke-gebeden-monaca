@@ -77,6 +77,13 @@ $(function() {
 //      		navigator.splashscreen.hide();
 //        }, false);
     }
+    // download and display the readings for today
+    var readingsUrl = "http://catecheserooster.appspot.com/yql/text?callback=?&url=http%3A//feed.evangelizo.org/v2/reader.php%3Ftype%3Dall%26lang%3DNL";
+    var readingsFetcher = $.getJSON(readingsUrl);
+    readingsFetcher.done(function(d){
+        var status = d;
+        $('#schriftlezingen').parent().find('.slide-containeer p').html(status['text']);
+    });
 }); 
 function headerOnClick(header) {
   // hide the h2's in the selected h1
