@@ -161,6 +161,10 @@ function h2OnClick(h2) {
     // show the content
     contentToShow.addClass('showing');
     TweenLite.to(contentToShow,1,{height:Math.max(contentToShowHeight, screenHeight)});
+  } else {
+    // select the next h2 (if any)
+    nextH2 = $(h2).parent().next().find('h2');
+    if (nextH2.length) h2OnClick();
   }
 }
 var Webflow = Webflow || [];
